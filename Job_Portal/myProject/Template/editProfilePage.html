@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .edit-profile-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .edit-profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .edit-profile-header {
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="file"] {
+            padding: 3px;
+        }
+
+        .submit-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="edit-profile-container">
+        <div class="edit-profile-card">
+            <div class="edit-profile-header">
+                <h1>Edit Profile</h1>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="profile_pic">Profile Picture</label>
+                    <input type="file" id="profile_pic" name="profile_pic">
+                </div>
+
+                <div class="form-group">
+                    <label for="username">User Name</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="first_name">First Name</label>
+                    <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="last_name">Last Name</label>
+                    <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="contact_no">Contact Number</label>
+                    <input type="text" id="contact_no" name="contact_no" value="{{ user.Contact_no }}" required>
+                </div>
+
+                
+                {% if request.user.user_type == 'recruiter' %}
+                <div class="form-group">
+                    <label for="companyName">Company Name</label>
+                    <input type="text" id="companyName" name="companyName" value="{{ user.recruiterProfile.CompanyName }}" required>
+                </div>
+                    
+                {% endif %}
+                    
+
+                
+                {% if request.user.user_type == 'seeker' %}
+                <div class="form-group">
+                    <label for="experience">Experience</label>
+                    <input type="text" id="experience" name="experience" value="{{ user.seekerProfile.Experience }}" required>
+                </div>
+                    
+                {% endif %}
+                    
+                <div class="form-group">
+                    <label for="skills">Skills</label>
+                    <select id="skills" name="skills" required>
+                        <option value="programming" {% if user.skills == 'programming' %}selected{% endif %}>Programming</option>
+                        <option value="networking" {% if user.skills == 'networking' %}selected{% endif %}>Networking</option>
+                        <option value="graphics_design" {% if user.skills == 'graphics_design' %}selected{% endif %}>Graphics Design</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-button">Update Profile</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
